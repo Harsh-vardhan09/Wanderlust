@@ -1,3 +1,24 @@
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container{
+    flex: 1;
+}
+
+.heading{
+    margin-top: 1rem;
+    margin-bottom: 1rem ;
+    font-weight: 500;
+    font-size: 2.5rem;
+}
+
+.form-label{
+    font-weight: 600 !important;
+}
 /* Navbar */
 .navbar{
     height: 4rem;
@@ -59,3 +80,68 @@
     text-decoration: underline;
 }
 
+/* Cards */
+
+.card{
+    border: none !important; 
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius:1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+}
+.card-text p{
+    font-weight: 400 !important;
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+/* card effect */
+
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+
+/* ADD Page */
+
+.add-btn{
+    background-color: #fe424d;
+    text-decoration: none;
+    
+}
+
+/* edit apge */
+
+.edit-btn{
+    background-color: #fe424d;
+    text-decoration: none;
+}
+
+/* show page */
+
+.show-card{
+    padding-left: 1rem;
+    padding-right: 0;
+    
+}
+
+.show-image{
+    height: 30vh;
+}
+
+.btns{
+    display: flex;
+}
