@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-8 offset-2">
         <h3 class="mb-3 mt-3 heading">Create a new listing</h3>
-      <form method="POST" action="/listings">
+      <form method="POST" action="/listings" class="needs-validation" novalidate>
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -12,15 +12,20 @@
             name="listing[title]"
             placeholder="enter title"
             class="form-control"
+            required
           />
+          <div class="valid-feedback">Title looks good</div>
         </div>
+
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
           <textarea
             type="text"
             class="form-control"
             name="listing[description]"
+            required
           ></textarea>
+          <div class="invalid-feedback">Please enter short description</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image Link</label>
@@ -35,11 +40,12 @@
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
             <input
-              type="number"
               class="form-control"
               name="listing[price]"
               placeholder="1200"
+              required
             />
+            <div class="invalid-feedback">Please enter a valid Price</div>
           </div>
 
           <div class="mb-3 col-md-8">
@@ -49,7 +55,9 @@
               class="form-control"
               name="listing[country]"
               placeholder="India"
+              required
             />
+            <div class="invalid-feedback">Invalid country</div>
           </div>
         </div>
         <div class="mb-3">
@@ -59,7 +67,9 @@
             class="form-control"
             name="listing[location]"
             placeholder="jaipur,Rajathan"
+            required
           />
+          <div class="invalid-feedback">Invalid Location</div>
         </div>
         <button class="btn add-btn mb-3">Add</button>
       </form>
