@@ -33,7 +33,9 @@ app.listen("8080", () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("root is working");
+  // res.send("root is working");
+  res.render("listing/hero.ejs")
+  
 });
 
 const validateListing = (req, res, next) => {
