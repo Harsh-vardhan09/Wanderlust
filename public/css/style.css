@@ -139,7 +139,8 @@ body{
 }
 
 .show-image{
-    height: 30vh;
+    height: 40vh;
+    width: 120vh !important;
 }
 
 .btns{

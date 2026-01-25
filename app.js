@@ -8,6 +8,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const {listingSchema}=require("./models/Schema.js");
+const Review=require("./models/review.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -34,7 +35,8 @@ app.listen("8080", () => {
 
 app.get("/", (req, res) => {
   // res.send("root is working");
-  res.render("listing/hero.ejs")
+  // res.render("listing/hero.ejs");
+  res.redirect("/listings")
   
 });
 
@@ -130,6 +132,21 @@ app.delete(
     res.redirect("/listings");
   }),
 );
+
+
+//REVIEWS
+//POST Route
+app.post("/listings/:id/reviews",async(req,res)=>{
+    let listing= await Listing.findById(req.params.id);
+    let newReview=new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+
+    console.log("new review saved");
+    res.redirect(`/listings/${listing._id}`);
+});
 
 
 // for all route that doesn't exist
