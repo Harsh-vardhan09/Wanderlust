@@ -1,5 +1,5 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<body>
+
   <h3 class="heading">All Listings</h3>
   <!-- <form action="/listings/new" method="GET">
         <button>Create New Listing</button>
@@ -8,7 +8,7 @@
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
     <% for(let listing of allListing){ %>
     <a href="/listings/<%= listing._id %>" class="listing-link">
-      <div class="card">
+      <div class=" card listing-card">
         <img
           src="<%= listing.image%>"
           class="card-img-top"
@@ -26,4 +26,4 @@
     </a>
     <% } %>
   </div>
-</body>
+
