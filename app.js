@@ -7,8 +7,30 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session=require("express-session");
 const flash=require("connect-flash");
-const listing=require("./routes/listing.js");
-const reviews=require("./routes/review.js");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
+
+const listingRouter=require("./routes/listing.js");
+const reviewsRouter=require("./routes/review.js");
+const userRouter=require("./routes/user.js");
+
+
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+}
+
+main()
+  .then(() => {
+    console.log("connected to db");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+app.listen("8080", () => {
+  console.log("server is running at port 8080");
+});
 
 
 app.set("view engine", "ejs");
@@ -40,6 +62,15 @@ app.get("/", (req, res) => {
 app.use(session(sessionsOptions));
 app.use(flash());
 
+//we need session for user authentication so we use passport after session
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
@@ -49,31 +80,22 @@ app.use((req,res,next)=>{
 })
 
 
+// app.get("/demouser",async(req,res)=>{
+//   let fakeUser=new User({
+//     email:"student@gmail.com",
+//     username:"real-student"
+//   });
 
+//  let registeredUser= await User.register(fakeUser,"helloworld");
+//  res.send(registeredUser);
 
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-}
-
-main()
-  .then(() => {
-    console.log("connected to db");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-app.listen("8080", () => {
-  console.log("server is running at port 8080");
-});
+// })
 
 
 
-
-
-app.use("/listings",listing);
-app.use("/listings/:id/reviews",reviews);//here the /listing/:id stays in this so we cant acess it in review route file to do that we need external  
-
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewsRouter);//here the /listing/:id stays in this so we cant acess it in review route file to do that we need external  
+app.use("/",userRouter);
 
 
 
