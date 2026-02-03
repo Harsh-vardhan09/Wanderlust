@@ -74,6 +74,9 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
+  res.locals.currUser=req.user;
+  //passport has user data in req.user if not logged in its `undefined` else it gives an object\
+  //we can use this to check whether user is logged in or not
 
   // console.log(res.locals.success)
   next();

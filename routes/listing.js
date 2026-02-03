@@ -5,6 +5,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { listingSchema } = require("../models/Schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
+const { isLoggedIn } = require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -26,7 +27,8 @@ router.get(
 );
 
 //new route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
+  console.log(req.user);
   res.render("listing/new.ejs");
 });
 
@@ -35,11 +37,15 @@ router.get(
   "/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id)
+      .populate("reviews")
+      .populate("owner");
     if (!listing) {
       req.flash("error", "Listing you requested does not exist");
       return res.redirect("/listings"); //we need to use return in `res.redirect` since because if we don't node will get both redirect to and render request below and crash due to double request.
     }
+    console.log(listing);
+    
     res.render("listing/show.ejs", { listing });
   }),
 );
@@ -47,9 +53,11 @@ router.get(
 //create route
 router.post(
   "/",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res) => {
     const newListing = new Listing(req.body.listing);
+    newListing.owner=req.user._id;
     await newListing.save();
     req.flash("success", "New Listing Created");
     res.redirect("/");
@@ -59,6 +67,7 @@ router.post(
 //Edit route
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
@@ -73,6 +82,7 @@ router.get(
 //Update route
 router.put(
   "/:id",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -85,6 +95,7 @@ router.put(
 //Delete route
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
