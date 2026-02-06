@@ -1,63 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
+const userController = require("../controller/users.js");
 
-router.post(
-  "/signup",
-  wrapAsync(async (req, res) => {
-    try {
-      let { username, email, password } = req.body;
-      const newUser = new User({ email, username });
-      const registeredUser = await User.register(newUser, password);
-      console.log(registeredUser);
-      req.login(registeredUser, (err) => {
-        if (err) {
-          return next(err);
-        }
-        req.flash("success", "Welcome to WanderLust");
-        res.redirect("/listings");
-      });
-    } catch (error) {
-      req.flash("error", error.message);
-      res.redirect("/signup");
-    }
-  }),
-);
+router
+  .route("/signup")
+  .get(userController.renderSignUpForm)
+  .post(wrapAsync(userController.signup));
 
-router.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
+router
+  .route("/login")
+  .get(userController.renderLoginForm)
+  .post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+      failureRedirect: "/login",
+      failureFlash: true,
+    }),
+    wrapAsync(userController.login),
+  );
 
-router.post(
-  "/login",
-  saveRedirectUrl,
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  wrapAsync(async (req, res) => {
-    // res.send("welcome to wanderLust,you are logged in")
-    req.flash("success", "welcome to wanderLust");
-    let redirectUrl=res.locals.redirectUrl||"/listings"
-    res.redirect(redirectUrl);
-  }),
-);
-
-router.get("/logout", (req, res) => {
-  req.logOut((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash("Success", "you are logged out now");
-    res.redirect("/listings");
-  });
-});
+router.get("/logout", userController.Logout);
 
 module.exports = router;

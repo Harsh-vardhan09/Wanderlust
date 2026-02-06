@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 
 app.use(session(sessionsOptions));
 app.use(flash());
-
+ 
 //we need session for user authentication so we use passport after session
 app.use(passport.initialize());
 app.use(passport.session());
@@ -75,6 +75,8 @@ app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
   res.locals.currUser=req.user;
+
+  
   //passport has user data in req.user if not logged in its `undefined` else it gives an object\
   //we can use this to check whether user is logged in or not
 
