@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
+const multer=require('multer');
+const{storage,cloudinary}=require("../cloudConfig.js");
+const upload = multer({storage});
 
 const listingController = require("../controller/listings.js");
 
@@ -12,9 +15,11 @@ router
   .get(wrapAsync(listingController.index)) //show all listings
   .post(//new listing
     isLoggedIn,
-    validateListing,
+    upload.single('listing[image]'),
+   validateListing,
     wrapAsync(listingController.createListing),
   );
+  
 
 //new route
 router.get("/new", isLoggedIn, listingController.renderNew);
@@ -26,6 +31,7 @@ router
   .put( //update route
     isLoggedIn,
     isOwner,
+    upload.single('listing[image]'),
     validateListing,
     wrapAsync(listingController.updateListing),
   )

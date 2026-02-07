@@ -9,9 +9,12 @@ const listingSchema=new Schema({
     },
     description:String,
     image:{ 
-        type:String,
-        default:"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=620&auto=format&fit=crop&q=60&ixlib=rb-4.1.0",//for image undefied no data send
-        set:(v)=> v===""?"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=620&auto=format&fit=crop&q=60&ixlib=rb-4.1.0":v, //for when the user doesnt send any data img form his side
+        // type:String,
+        // default:"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=620&auto=format&fit=crop&q=60&ixlib=rb-4.1.0",//for image undefied no data send
+        // set:(v)=> v===""?"https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=620&auto=format&fit=crop&q=60&ixlib=rb-4.1.0":v, //for when the user doesnt send any data img form his side
+
+        url:String,
+        filename:String,
     },
     price:Number,
     location:String,

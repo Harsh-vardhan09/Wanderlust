@@ -6,6 +6,7 @@
       <form
         method="POST"
         action="/listings/<%= listing._id %>?_method=PUT"
+        enctype="multipart/form-data"
         class="needs-validation"
         novalidate
       >
@@ -18,7 +19,7 @@
             value="<%= listing.title %>"
             required
           />
-            <div class="invalid-feedback">Please enter valid title</div>
+          <div class="invalid-feedback">Please enter valid title</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -29,21 +30,19 @@
             required
           >
             <%= listing.description%>
-        </textarea>
+        </textarea
+          >
           <div class="invalid-feedback">Please enter short description</div>
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Image Link</label>
-          <input
-            type="text"
-            class="form-control"
-            name="listing[image]"
-            value="<%= listing.image %>"
-            required
-          />
-          <div class="invalid-feedback">Please enter valid image URL</div>
+          Original Listing Image <br>
+          <img src="<%= originalImageUrl %>" alt="prevImage" style="height:30%;width:30%;border-radius: 10px;" />
+        </div>
 
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload new Image</label>
+          <input type="file" class="form-control" name="listing[image]" />
         </div>
 
         <div class="row">
@@ -57,7 +56,6 @@
               required
             />
             <div class="invalid-feedback">Invalid Price</div>
-
           </div>
 
           <div class="mb-3 col-md-8">
@@ -69,7 +67,7 @@
               value="<%= listing.country %>"
               required
             />
-             <div class="invalid-feedback">Invalid Country</div>
+            <div class="invalid-feedback">Invalid Country</div>
           </div>
         </div>
         <div class="mb-3">
@@ -81,7 +79,7 @@
             value="<%= listing.location %>"
             required
           />
-           <div class="invalid-feedback">Invalid Location</div>
+          <div class="invalid-feedback">Invalid Location</div>
         </div>
         <button class="btn btn-dark edit-btn mb-3">edit</button>
       </form>
