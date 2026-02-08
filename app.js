@@ -1,9 +1,6 @@
-if(process.env.NODE_env!="production"){
+if(process.env.NODE_ENV!="production"){
   require('dotenv').config();
 }
-
-
-console.log(process.env.SECRET)
 
 const express = require("express");
 const app = express();
@@ -13,6 +10,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session=require("express-session");
+const MongoStore = require("connect-mongo");
 const flash=require("connect-flash");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
@@ -22,9 +20,11 @@ const listingRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
+const dbUrl=process.env.ATLASDB_URL
+
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  await mongoose.connect(dbUrl);
 }
 
 main()
@@ -35,7 +35,7 @@ main()
     console.log(err);
   });
 
-app.listen("8080", () => {
+app.listen(process.env.PORT, () => {
   console.log("server is running at port 8080");
 });
 
@@ -47,8 +47,22 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const store= MongoStore.default.create({
+  mongoUrl:dbUrl,
+  crypto:{
+    secret:process.env.SECRET
+  },
+  touchAfter:24*60*60,//It controls how often an existing session is updated (“touched”) in MongoDB, even if the session data hasn’t changed.
+});
+
+store.on("error",()=>{
+  console.log("Error in Mongo session store",err)
+});
+
 const sessionsOptions={
-   secret:"mysupersecretcode",
+   store,
+   secret:process.env.SECRET,
    resave:false,
    saveUninitialized:true,
    cookie:{
@@ -57,6 +71,7 @@ const sessionsOptions={
     httpOnly:true
    }
 }
+
 
 app.get("/", (req, res) => {
   // res.send("root is working");

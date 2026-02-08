@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "20.19.5"
+  },
   "name": "learningproject",
   "version": "1.0.0",
   "main": "index.js",
@@ -11,8 +14,9 @@
   "description": "",
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.16.2",
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^1.21.0",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^6.0.0",
     "dotenv": "^17.2.4",
     "ejs": "^4.0.1",
     "ejs-mate": "^4.0.0",
