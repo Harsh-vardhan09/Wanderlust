@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"
+    <a class="navbar-brand" href="/listings"
       ><i class="fa-solid fa-compass"></i>Wanderlust</a
     >
     <button
@@ -13,14 +13,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/listings">All listings</a>
-        <a class="nav-link" href="/listings/new">Add new listing</a>
+        <a class="nav-link" href="/listings">Explore</a>
       </div>
       <div class="navbar-nav ms-auto">
+         <a class="nav-link" href="/listings/new">List you home</a>
         <% if(!currUser){ %>
-          <a class="nav-link" href="/signup">Sign Up</a>
-          <a class="nav-link" href="/Login">Log In</a>
+          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+          <a class="nav-link" href="/Login"><b>Log In</b></a>
         <% } %>
         <% if(currUser){ %>
           <a class="nav-link" href="/logout">Log Out</a>
