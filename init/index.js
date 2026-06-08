@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
+
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  await mongoose.connect(process.env.ATLASDB_URI);
 }
 
 main()
@@ -18,7 +19,7 @@ const initDB = async () => {
   await Listing.deleteMany({});
   initData.data = initData.data.map((obj) => ({
     ...obj,
-    owner: "698252f38d86c0ba0e95c669",
+    owner: "6a2698639e4187562b123536",
   }));
   await Listing.insertMany(initData.data);
   console.log("data was initialized");
